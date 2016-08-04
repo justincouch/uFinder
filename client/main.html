@@ -1,0 +1,291 @@
+<head>
+  <title>Shop Thing Locator</title>
+  <link rel="stylesheet" type="text/css" href="/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="/styles/jquery.svg.css"> 
+  <script type="text/javascript" src="/js/svgPanZoom.min.js"></script>
+</head>
+
+<body>
+  {{> map_svg_template}}
+
+  {{> loginButtons}}
+
+  {{> search_template}}
+
+  {{> map_list_toggle_template}}
+
+  <script type="text/javascript" src="/js/jquery.svg.js"></script>
+  <script type="text/javascript">
+
+  </script>
+</body>
+
+
+
+<template name="map_svg_template">
+  
+
+  <div class="map_img map_bottom">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+      id="svg-map" 
+      class="svg-ht" 
+      viewBox="0 0 399 126"
+      width="399" height="126"
+      >
+      
+      <image xlink:href="/images/OfficeMap_Final_72.jpg" x="0" y="0" width="399px" height="126px"/>
+      <rect class="svg_outline" x="0" y="0" width="399" height="126"></rect>
+      
+      {{> room_svg_template}}
+      {{> shelf_svg_template}}
+      
+    </svg>
+    
+  </div>
+</template>
+
+
+
+<template name="room_svg_template">
+  {{#each rooms}}
+    <rect id="{{_id}}" class="svg_room" x={{x}} y={{y}} width={{w}} height={{h}}></rect>
+  {{/each}}
+</template>
+
+<template name="shelf_svg_template">
+  {{#each shelves}}
+    <rect id="{{_id}}" class="svg_shelf" x={{adj_x}} y={{adj_y}} width={{w}} height={{h}}></rect>
+    <text 
+      x={{cent_x}} y={{cent_y}}
+      text-anchor="middle"
+      transform="rotate({{rot}} {{cent_x}} {{cent_y}})"
+      style="font-family: Human Sans;
+             font-size: 1;
+             ">
+      {{label}}
+    </text>
+  {{/each}}
+</template>
+
+
+
+<template name="search_template">
+  {{> EasySearch.Input indexes=searchIndexes attributes=searchBarAttributes }}
+
+  <div class="container">
+    <div class="items_column column">
+      {{#if currentUser}}
+        <button class="add_item add">&plus;</button>
+      {{/if}}
+
+      <h2>Item</h2>
+      {{> add_item_template}}
+
+      <ul class="items-ul">
+        {{#EasySearch.Each index=itemsIndex }}
+          {{> item_template}}
+        {{/EasySearch.Each}}
+      </ul>
+    </div>
+
+    <div class="bins_column column">
+      {{#if currentUser}}
+        <button class="add_bin add">&plus;</button>
+      {{/if}}
+      <h2>Bin</h2>
+      {{> add_bin_template}}
+      
+      <ul class="bins-ul">
+        {{#EasySearch.Each index=binsIndex }}
+          {{> bin_template}}
+        {{/EasySearch.Each}}
+      </ul>
+    </div>
+
+    <div class="shelves_column column">
+      {{#if currentUser}}
+        <button class="add_shelf add">&plus;</button>
+      {{/if}}
+
+      <h2>Shelf / Tool</h2>
+      {{> add_shelf_template}}
+
+      <ul class="shelves-ul">
+        {{#EasySearch.Each index=shelvesIndex }}
+          {{> shelf_template}}
+        {{/EasySearch.Each}}
+      </ul>
+    </div>
+
+    <div class="rooms_column column">
+      {{#if currentUser}}
+        <button class="add_room add">&plus;</button>
+      {{/if}}
+
+      <h2>Room</h2>
+      {{> add_room_template}}
+
+      <ul class="rooms-ul">
+        {{#EasySearch.Each index=roomsIndex }}
+          {{> room_template}}
+        {{/EasySearch.Each}}
+      </ul>
+    </div>
+
+  </div>
+</template>
+
+
+
+
+
+
+
+<template name="add_item_template">
+  <div class="add_item_container">
+    <input type="text" name="item_label" placeholder="Item label"/>
+    <select id="bin-select">
+      <option disabled="disabled" selected="selected" value="default">Please Select</option> 
+      {{#each bins}}
+        <option value="{{_id}}">{{label}}</option>
+      {{/each}}
+    </select>
+    <input type="text" name="item_keywords" placeholder="Keywords"/>
+    <button type="submit" class="add_item_submit">Add Item</button>
+  </div>
+</template>
+
+<template name="item_template">
+  <li id={{_id}} class="item-li">
+    {{#if currentUser}}
+      <a class="js-delete-item delete-item trash-button" href="#">
+        <span class="fa fa-trash"></span>
+      </a>
+      <!-- <button class="edit">&pencil;</button> -->
+      <a class="js-edit-item edit-item edit-button" href="#">
+        <span class="fa fa-edit"></span>
+      </a>
+      {{/if}}
+    <span class="label">{{label}}</span>
+  </li>
+</template>
+
+
+
+
+
+<template name="add_bin_template">
+  <div class="add_bin_container">
+    <input type="text" name="bin_label" placeholder="Bin label"/>
+    <select id="shelf-select">
+      <option disabled="disabled" selected="selected" value="default">Please Select</option> 
+      {{#each shelves}}
+        <option value="{{_id}}">{{label}}</option>
+      {{/each}}
+    </select>
+    <input type="text" name="bin_keywords" placeholder="Keywords"/>
+    <button type="submit" class="add_bin_submit">Add Bin</button>
+  </div>
+</template>
+
+<template name="bin_template">
+  <li id={{_id}} class="bin-li">
+    {{#if currentUser}}
+      <a class="js-delete-item delete-bin trash-button" href="#">
+        <span class="fa fa-trash"></span>
+      </a>
+      <!-- <button class="edit">&pencil;</button> -->
+      <a class="js-edit-item edit-bin edit-button" href="#">
+        <span class="fa fa-edit"></span>
+      </a>
+    {{/if}}
+    <span class="label">{{label}}</span>
+  </li>
+</template>
+
+
+
+
+
+
+
+<template name="add_shelf_template">
+  <div class="add_shelf_container">
+    <input type="text" name="shelf_label" placeholder="Shelf label"/>
+    <!-- <input type="text" name="shelf_room" placeholder="Room"/> -->
+    <select id="room-select">
+      <option disabled="disabled" selected="selected" value="default">Please Select</option> 
+      {{#each rooms}}
+        <option value="{{_id}}">{{label}}</option>
+      {{/each}}
+    </select>
+    <input type="text" name="shelf_keywords" placeholder="Keywords"/>
+    <input type="text" name="shelf_x" placeholder="X"/>
+    <input type="text" name="shelf_y" placeholder="Y"/>
+    <input type="text" name="shelf_w" placeholder="Width"/>
+    <input type="text" name="shelf_h" placeholder="Height"/>
+    <button type="submit" class="add_shelf_submit">Add Shelf</button>
+  </div>
+</template>
+
+<template name="shelf_template">
+  <li id={{_id}} class="shelf-li">
+    {{#if currentUser}}
+      <a class="js-delete-item delete-shelf trash-button" href="#">
+        <span class="fa fa-trash"></span>
+      </a>
+      <!-- <button class="edit">&pencil;</button> -->
+      <a class="js-edit-item edit-shelf edit-button" href="#">
+        <span class="fa fa-edit"></span>
+      </a>
+    {{/if}}
+    <span class="label">{{label}}</span>
+  </li>
+</template>
+
+
+
+
+
+
+
+<template name="add_room_template">
+  <div class="add_room_container">
+    <input type="text" name="room_label" placeholder="Room label"/>
+    <input type="text" name="room_keywords" placeholder="Keywords"/>
+    <input type="text" name="room_x" placeholder="X"/>
+    <input type="text" name="room_y" placeholder="Y"/>
+    <input type="text" name="room_w" placeholder="Width"/>
+    <input type="text" name="room_h" placeholder="Height"/>
+    <button type="submit" class="add_room_submit">Add Room</button>
+  </div>
+</template>
+
+<template name="room_template">
+  <li id={{_id}} class="room-li">
+    {{#if currentUser}}
+      <a class="js-delete-item delete-room trash-button" href="#">
+        <span class="fa fa-trash"></span>
+      </a>
+      <!-- <button class="edit">&pencil;</button> -->
+      <a class="js-edit-item edit-room edit-button" href="#">
+        <span class="fa fa-edit"></span>
+      </a>
+    {{/if}}
+    <span class="label">{{label}}</span>
+  </li>
+</template>
+
+
+
+
+
+
+<template name="map_list_toggle_template">
+  <div id="map-list-toggle_div" class="map-list-toggle">
+    <a class="map-list-toggle-link" href="#">
+      <span id="list-icon" class="map-list-icon fa fa-list"></span>
+      <span id="map-icon" class="map-list-icon fa fa-map" style="display:none;"></span>
+    </a>
+  </div>
+</template>
