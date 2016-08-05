@@ -10,6 +10,6 @@
     "install": "mv node_modules public/node_modules"
   },
   "dependencies": {
-    "meteor-node-stubs": "~0.2.0",
+    "meteor-node-stubs": "~0.2.0"
   }
 }
