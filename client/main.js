@@ -60,14 +60,14 @@ function resetSVG(){
 const INACTIVE_TIME = 120000; // inactive timer length (1 min)
 let inactiveTimeout;
 
-document.onmousemove = resetInactiveTimer;
-document.onkeypress = resetInactiveTimer;
+//document.onmousemove = resetInactiveTimer;
+//document.onkeypress = resetInactiveTimer;
 
 function resetInactiveTimer(){
   clearTimeout( inactiveTimeout );
-  inactiveTimeout = setTimeout( function() {
-    inactiveReset();
-  }, INACTIVE_TIME );
+  // inactiveTimeout = setTimeout( function() {
+  //   inactiveReset();
+  // }, INACTIVE_TIME );
 }
 
 function inactiveReset(){
