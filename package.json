@@ -1,10 +1,16 @@
 {
   "name": "shopLocatorApp",
   "private": true,
+  "version": "0.0.1",
+  "engines": {
+    "node": "0.6.x"
+  },
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run",
+    "install": "mv node_modules public/node_modules"
   },
   "dependencies": {
-    "meteor-node-stubs": "~0.2.0"
+    "meteor-node-stubs": "~0.2.0",
+    "bcrypt": "0.5.0"
   }
 }
